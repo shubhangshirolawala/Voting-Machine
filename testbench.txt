@@ -1,0 +1,122 @@
+module votingMachine_tb;
+
+    reg clock;
+    reg reset;
+    reg mode;
+    reg button1;
+    reg button2;
+    reg button3;
+    reg button4;
+    reg [7:0] led;
+    
+    // Instantiate the voting machine module
+    votingMachine uut (
+        .clock(clock),
+        .reset(reset),
+        .mode(mode),
+        .button1(button1),
+        .button2(button2),
+        .button3(button3),
+        .button4(button4),
+        .led(led)
+    );
+
+    // Clock generation
+    always #1 clock = ~clock; // 1ns period, 1 GHz clock
+
+    initial begin
+        // Set up VCD dumping
+        $dumpfile("dump.vcd");
+        $dumpvars(0, votingMachine_tb);
+
+        // Initialize inputs
+        clock = 0;
+        reset = 1;
+        mode = 0;
+        button1 = 0;
+        button2 = 0;
+        button3 = 0;
+        button4 = 0;
+
+        // Apply reset
+        #10 reset = 0;
+        #10 reset = 1;
+        #10 reset = 0;
+
+        // Test case 1: Press button1 for less than 1us
+//         button1 = 1;
+//         #500; // 500ns
+//         button1 = 0;
+//         #1000; // 1us to check if valid_vote is reset
+
+        // Test case 2: Press button1 for more than 1us
+        button1 = 1;
+        #2100; // 1.1us
+        button1 = 0;
+        #1000; // 1us to check if valid_vote is reset
+       button1 = 1;
+        #2100; // 1.1us
+        button1 = 0;
+        #1000; // 1us to check if valid_vote is reset
+		
+        // Switch to result mode and check the result
+        mode = 1;
+        button1 = 1; // Press button1 to show candidate1 votes
+        #1000; // Small delay
+        button1 = 0;
+        #2000; // 1us to check if LEDs show candidate1 votes
+
+//         // Reset and switch back to voting mode
+//         reset = 1;
+//         #10 reset = 0;
+//         mode = 0;
+
+//         // Test case 3: Press button2 for more than 1us
+//         button2 = 1;
+//         #2000; // 1.1us
+//         button2 = 0;
+//         #1000; // 1us to check if valid_vote is reset
+
+//         // Switch to result mode and check the result
+//         mode = 1;
+//         button2 = 1; // Press button2 to show candidate2 votes
+//         #10; // Small delay
+//         button2 = 0;
+//         #1000; // 1us to check if LEDs show candidate2 votes
+
+//         // Test case 4: Press button3 for more than 1us
+//         reset = 1;
+//         #10 reset = 0;
+//         mode = 0;
+//         button3 = 1;
+//         #2000; // 1.1us
+//         button3 = 0;
+//         #1000; // 1us to check if valid_vote is reset
+
+//         // Switch to result mode and check the result
+//         mode = 1;
+//         button3 = 1; // Press button3 to show candidate3 votes
+//         #10; // Small delay
+//         button3 = 0;
+//         #1000; // 1us to check if LEDs show candidate3 votes
+
+//         // Test case 5: Press button4 for more than 1us
+//         reset = 1;
+//         #10 reset = 0;
+//         mode = 0;
+//         button4 = 1;
+//         #1100; // 1.1us
+//         button4 = 0;
+//         #1000; // 1us to check if valid_vote is reset
+
+//         // Switch to result mode and check the result
+//         mode = 1;
+//         button4 = 1; // Press button4 to show candidate4 votes
+//         #10; // Small delay
+//         button4 = 0;
+//         #1000; // 1us to check if LEDs show candidate4 votes
+
+        // Finish simulation
+        $finish;
+    end
+endmodule
